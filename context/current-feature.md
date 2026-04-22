@@ -1,10 +1,12 @@
 # Current Feature
 
-<!-- Feature name and short description -->
+<!-- Feature Name -->
 
 ## Status
 
-<!-- Not Started | In Progress | Completed -->
+<!-- Not Started|In Progress|Completed -->
+
+Not Started
 
 ## Goals
 
@@ -23,3 +25,4 @@
 - **Database Setup** - Prisma 7 with Neon PostgreSQL, full schema (User, Item, ItemType, Collection, ItemCollection, Tag, NextAuth models), initial migration, system item types seeded (Completed)
 - **Seed Data** - Demo user (demo@devstash.io), 7 system item types, 5 collections (React Patterns, AI Workflows, DevOps, Terminal Commands, Design Resources) with 18 items across snippets, prompts, commands, and links (Completed)
 - **Dashboard Collections** - Replaced mock collection data with real Prisma/Neon DB data; created `src/lib/db/collections.ts`, border color derived from dominant item type, type icons shown per collection, dashboard page converted to async server component (Completed)
+- **Dashboard Items** - Replaced mock item data with real Prisma/Neon DB data; created `src/lib/db/items.ts` with `getPinnedItems`, `getRecentItems`, `getDashboardStats`; icon/border derived from item type; pinned section hidden when empty; stats cards wired to live counts (Completed)

@@ -1,13 +1,13 @@
 import Link from 'next/link';
 import { Clock } from 'lucide-react';
-import { MOCK_ITEMS } from '@/lib/mock-data';
+import type { ItemWithType } from '@/lib/db/items';
 import { ItemRow } from './item-row';
 
-const recentItems = [...MOCK_ITEMS]
-  .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
-  .slice(0, 10);
+interface RecentItemsProps {
+  items: ItemWithType[];
+}
 
-export function RecentItems() {
+export function RecentItems({ items }: RecentItemsProps) {
   return (
     <section>
       <div className="flex items-center justify-between mb-3">
@@ -20,7 +20,7 @@ export function RecentItems() {
         </Link>
       </div>
       <div className="rounded-lg border border-border bg-card divide-y divide-border overflow-hidden">
-        {recentItems.map((item) => (
+        {items.map((item) => (
           <ItemRow key={item.id} item={item} />
         ))}
       </div>

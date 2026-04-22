@@ -1,27 +1,21 @@
 import { LayoutGrid, BookOpen, Star, Bookmark } from 'lucide-react';
-import {
-  MOCK_ITEMS,
-  MOCK_COLLECTIONS,
-  FAVORITE_COLLECTIONS,
-  TYPE_COUNTS,
-} from '@/lib/mock-data';
+import type { DashboardStats } from '@/lib/db/items';
 
-const totalItems = Object.values(TYPE_COUNTS).reduce((a, b) => a + b, 0);
-const totalCollections = MOCK_COLLECTIONS.length;
-const favoriteItems = MOCK_ITEMS.filter((i) => i.isFavorite).length;
-const favoriteCollections = FAVORITE_COLLECTIONS.length;
+interface StatsCardsProps {
+  stats: DashboardStats;
+}
 
-const stats = [
-  { label: 'Total Items', value: totalItems, icon: LayoutGrid, color: '#3b82f6' },
-  { label: 'Collections', value: totalCollections, icon: BookOpen, color: '#8b5cf6' },
-  { label: 'Favorite Items', value: favoriteItems, icon: Star, color: '#f97316' },
-  { label: 'Favorite Collections', value: favoriteCollections, icon: Bookmark, color: '#10b981' },
-];
+export function StatsCards({ stats }: StatsCardsProps) {
+  const cards = [
+    { label: 'Total Items', value: stats.totalItems, icon: LayoutGrid, color: '#3b82f6' },
+    { label: 'Collections', value: stats.totalCollections, icon: BookOpen, color: '#8b5cf6' },
+    { label: 'Favorite Items', value: stats.favoriteItems, icon: Star, color: '#f97316' },
+    { label: 'Favorite Collections', value: stats.favoriteCollections, icon: Bookmark, color: '#10b981' },
+  ];
 
-export function StatsCards() {
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-      {stats.map(({ label, value, icon: Icon, color }) => (
+      {cards.map(({ label, value, icon: Icon, color }) => (
         <div
           key={label}
           className="rounded-lg border border-border bg-card p-4 flex items-center gap-4"

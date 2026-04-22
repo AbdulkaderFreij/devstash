@@ -2,19 +2,18 @@ import {
   Code, Sparkles, Terminal, StickyNote, File, Image,
   Link as LinkIcon, Star, Pin,
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import type { Item } from '@/lib/mock-data';
+import type { ItemWithType } from '@/lib/db/items';
 
 const ICON_MAP: Record<string, React.ElementType> = {
   Code, Sparkles, Terminal, StickyNote, File, Image, Link: LinkIcon,
 };
 
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+function formatDate(date: Date | string) {
+  return new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 
 interface ItemRowProps {
-  item: Item;
+  item: ItemWithType;
   showPin?: boolean;
 }
 
@@ -36,7 +35,9 @@ export function ItemRow({ item, showPin }: ItemRowProps) {
           {item.isFavorite && <Star className="h-3 w-3 text-yellow-500 fill-yellow-500 shrink-0" />}
           {showPin && item.isPinned && <Pin className="h-3 w-3 text-muted-foreground shrink-0" />}
         </div>
-        <p className="text-xs text-muted-foreground truncate mt-0.5">{item.description}</p>
+        {item.description && (
+          <p className="text-xs text-muted-foreground truncate mt-0.5">{item.description}</p>
+        )}
         {item.tags.length > 0 && (
           <div className="flex flex-wrap gap-1 mt-1.5">
             {item.tags.slice(0, 4).map((tag) => (
