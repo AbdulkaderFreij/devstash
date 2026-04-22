@@ -2,11 +2,21 @@
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
+- Add 4 stats cards at the top (total items, collections, favorite items, favorite collections)
+- Show recent collections section
+- Show pinned items section
+- Show 10 recent items section
+- Use mock data from `src/lib/mock-data.js`
+
 ## Notes
+
+- Reference spec: `context/features/dashboard-phase-3-spec.md`
+- Reference screenshot: `context/screenshots/dashboard-ui-main.png`
+- Import mock data directly (no database yet)
 
 ## History
 
