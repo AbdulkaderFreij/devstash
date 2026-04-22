@@ -46,7 +46,6 @@ Example v4 configuration:
 @theme {
   --color-primary: oklch(50% 0.2 250);
 }
-```
 
 ## File Organization
 
@@ -90,8 +89,17 @@ Example v4 configuration:
 - Return `{ success, data, error }` pattern from actions
 - Display user-friendly error messages via toast
 
+## Testing
+
+- Vitest for unit tests (server actions and utilities only, not components)
+- Test files live next to source files: `feature.test.ts`
+- Run tests: `npm run test` (single run) or `npm run test:watch` (watch mode)
+- Use `vi.mock()` for external dependencies (Prisma, Resend, etc.)
+- Use `vi.useFakeTimers()` for time-dependent logic
+
 ## Code Quality
 
 - No commented-out code unless specified
 - No unused imports or variables
 - Keep functions under 50 lines when possible
+```
