@@ -1,12 +1,24 @@
 'use client';
 
-import { Search, Plus } from 'lucide-react';
+import { Search, Plus, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
-export function TopBar() {
+interface TopBarProps {
+  onMenuToggle?: () => void;
+}
+
+export function TopBar({ onMenuToggle }: TopBarProps) {
   return (
     <header className="h-14 border-b border-border flex items-center gap-4 px-4 shrink-0">
+      <button
+        onClick={onMenuToggle}
+        className="lg:hidden flex items-center justify-center h-8 w-8 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+        aria-label="Open menu"
+      >
+        <Menu className="h-5 w-5" />
+      </button>
+
       <div className="flex items-center gap-2 font-semibold text-lg">
         <span className="bg-blue-600 text-white text-xs font-bold px-1.5 py-0.5 rounded">
           DS
