@@ -7,12 +7,8 @@ import {
   PanelLeftClose, PanelLeftOpen,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import {
-  ITEM_TYPES,
-  FAVORITE_COLLECTIONS,
-  ALL_COLLECTIONS,
-  TYPE_COUNTS,
-} from '@/lib/mock-data';
+import type { SidebarItemType } from '@/lib/db/items';
+import type { SidebarCollection } from '@/lib/db/collections';
 
 const ICON_MAP: Record<string, React.ElementType> = {
   Code,
@@ -29,9 +25,21 @@ interface SidebarProps {
   isMobileOpen: boolean;
   onToggleCollapse: () => void;
   onMobileClose: () => void;
+  itemTypes: SidebarItemType[];
+  collections: SidebarCollection[];
 }
 
-export function Sidebar({ isCollapsed, isMobileOpen, onToggleCollapse, onMobileClose }: SidebarProps) {
+export function Sidebar({
+  isCollapsed,
+  isMobileOpen,
+  onToggleCollapse,
+  onMobileClose,
+  itemTypes,
+  collections,
+}: SidebarProps) {
+  const favoriteCollections = collections.filter((c) => c.isFavorite);
+  const allCollections = collections.filter((c) => !c.isFavorite);
+
   return (
     <>
       {/* Mobile backdrop */}
@@ -48,15 +56,13 @@ export function Sidebar({ isCollapsed, isMobileOpen, onToggleCollapse, onMobileC
         className={cn(
           'flex flex-col bg-sidebar border-r border-sidebar-border shrink-0',
           'transition-[width,transform] duration-200 ease-in-out',
-          // Mobile: fixed drawer, hidden off-screen by default
           'fixed inset-y-0 left-0 z-50 w-64',
           isMobileOpen ? 'translate-x-0' : '-translate-x-full',
-          // Desktop: reset to normal flow
           'lg:relative lg:inset-auto lg:z-auto lg:translate-x-0',
           isCollapsed ? 'lg:w-16' : 'lg:w-64',
         )}
       >
-        {/* Sidebar header (collapse toggle for desktop) */}
+        {/* Sidebar header */}
         <div
           className={cn(
             'h-14 flex items-center border-b border-sidebar-border shrink-0',
@@ -87,9 +93,8 @@ export function Sidebar({ isCollapsed, isMobileOpen, onToggleCollapse, onMobileC
               </p>
             )}
             <nav className="space-y-0.5">
-              {ITEM_TYPES.map((type) => {
+              {itemTypes.map((type) => {
                 const Icon = ICON_MAP[type.icon];
-                const count = TYPE_COUNTS[type.name];
                 return (
                   <Link
                     key={type.id}
@@ -107,7 +112,7 @@ export function Sidebar({ isCollapsed, isMobileOpen, onToggleCollapse, onMobileC
                     {!isCollapsed && (
                       <>
                         <span className="capitalize flex-1">{type.name}s</span>
-                        <span className="text-xs text-muted-foreground tabular-nums">{count}</span>
+                        <span className="text-xs text-muted-foreground tabular-nums">{type.count}</span>
                       </>
                     )}
                   </Link>
@@ -127,13 +132,13 @@ export function Sidebar({ isCollapsed, isMobileOpen, onToggleCollapse, onMobileC
               </div>
 
               {/* Favorites */}
-              {FAVORITE_COLLECTIONS.length > 0 && (
+              {favoriteCollections.length > 0 && (
                 <div className="mb-4">
                   <p className="text-[10px] font-semibold text-muted-foreground/60 uppercase tracking-widest px-2 mb-1">
                     Favorites
                   </p>
                   <nav className="space-y-0.5">
-                    {FAVORITE_COLLECTIONS.map((col) => (
+                    {favoriteCollections.map((col) => (
                       <Link
                         key={col.id}
                         href={`/collections/${col.id}`}
@@ -148,20 +153,23 @@ export function Sidebar({ isCollapsed, isMobileOpen, onToggleCollapse, onMobileC
                 </div>
               )}
 
-              {/* All Collections */}
-              {ALL_COLLECTIONS.length > 0 && (
+              {/* Recent (non-favorite) collections */}
+              {allCollections.length > 0 && (
                 <div>
                   <p className="text-[10px] font-semibold text-muted-foreground/60 uppercase tracking-widest px-2 mb-1">
-                    All Collections
+                    Recent
                   </p>
                   <nav className="space-y-0.5">
-                    {ALL_COLLECTIONS.map((col) => (
+                    {allCollections.map((col) => (
                       <Link
                         key={col.id}
                         href={`/collections/${col.id}`}
                         className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm text-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors"
                       >
-                        <span className="h-3.5 w-3.5 shrink-0" />
+                        <span
+                          className="h-3.5 w-3.5 shrink-0 rounded-full"
+                          style={{ backgroundColor: col.dominantColor ?? '#6b7280' }}
+                        />
                         <span className="flex-1 truncate">{col.name}</span>
                         <span className="text-xs text-muted-foreground tabular-nums">{col.itemCount}</span>
                       </Link>
@@ -169,6 +177,14 @@ export function Sidebar({ isCollapsed, isMobileOpen, onToggleCollapse, onMobileC
                   </nav>
                 </div>
               )}
+
+              {/* View all collections link */}
+              <Link
+                href="/collections"
+                className="flex items-center gap-2 rounded-md px-2 py-1.5 mt-2 text-xs text-muted-foreground hover:text-foreground hover:bg-sidebar-accent transition-colors"
+              >
+                View all collections
+              </Link>
             </div>
           )}
         </div>

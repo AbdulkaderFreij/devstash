@@ -1,5 +1,13 @@
 import { prisma } from '@/lib/prisma';
 
+export interface SidebarItemType {
+  id: string;
+  name: string;
+  icon: string;
+  color: string;
+  count: number;
+}
+
 export interface ItemWithType {
   id: string;
   title: string;
@@ -41,6 +49,21 @@ export async function getRecentItems(limit = 10): Promise<ItemWithType[]> {
     orderBy: { updatedAt: 'desc' },
     include: itemInclude,
   });
+}
+
+export async function getSystemItemTypes(): Promise<SidebarItemType[]> {
+  const types = await prisma.itemType.findMany({
+    where: { isSystem: true },
+    include: { _count: { select: { items: true } } },
+  });
+
+  return types.map((t) => ({
+    id: t.id,
+    name: t.name,
+    icon: t.icon,
+    color: t.color,
+    count: t._count.items,
+  }));
 }
 
 export async function getDashboardStats(): Promise<DashboardStats> {
